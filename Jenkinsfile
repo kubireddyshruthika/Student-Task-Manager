@@ -11,28 +11,24 @@ pipeline {
 
         stage('Test') {
             steps {
-                echo 'TEST: Validating website'
-                bat 'if exist index.html (echo Test passed: HTML file exists) else (exit 1)'
-                echo 'TEST PASSED!'
+                echo 'TEST: Checking website file'
+                bat 'if exist index.html (echo Test passed) else (exit 1)'
             }
         }
 
         stage('Deploy') {
             steps {
-                echo 'DEPLOY: Preparing website files'
+                echo 'DEPLOY: Copying website'
                 bat 'if not exist deployed mkdir deployed'
                 bat 'copy /Y index.html deployed\\index.html'
-                echo 'DEPLOY SUCCESS: Website copied to deployed folder'
+                echo 'DEPLOY SUCCESS'
             }
         }
     }
 
     post {
         success {
-            echo 'SUCCESS: Student Task Manager CI/CD pipeline completed!'
-        }
-        failure {
-            echo 'FAILED: Check the Console Output for details.'
+            echo 'Student Task Manager CI/CD pipeline completed successfully!'
         }
     }
 }
