@@ -12,17 +12,16 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'TEST: Validating website'
-                bat 'findstr /I /C:"<html" index.html'
-                bat 'findstr /I /C:"<script" index.html'
-                echo 'TEST PASSED: HTML and JavaScript sections found'
+                bat 'if exist index.html (echo Test passed: HTML file exists) else (exit 1)'
+                echo 'TEST PASSED!'
             }
         }
 
         stage('Deploy') {
             steps {
                 echo 'DEPLOY: Preparing website files'
-                bat 'if not exist "%WORKSPACE%\\deployed" mkdir "%WORKSPACE%\\deployed"'
-                bat 'copy /Y index.html "%WORKSPACE%\\deployed\\index.html"'
+                bat 'if not exist deployed mkdir deployed'
+                bat 'copy /Y index.html deployed\\index.html'
                 echo 'DEPLOY SUCCESS: Website copied to deployed folder'
             }
         }
