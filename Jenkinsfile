@@ -13,7 +13,7 @@ pipeline {
             steps {
                 script {
                     if (!fileExists('index.html')) {
-                        error('index.html is missing.')
+                        error('ERROR: index.html not found!')
                     }
                     echo 'SUCCESS: index.html exists.'
                 }
@@ -22,21 +22,21 @@ pipeline {
 
         stage('Build') {
             steps {
-                echo 'Build stage completed successfully.'
+                echo 'BUILD SUCCESSFUL'
             }
         }
 
         stage('Test') {
             steps {
                 bat 'findstr /i /c:"<html" index.html > NUL'
-                echo 'SUCCESS: HTML file test passed.'
+                echo 'TEST PASSED: HTML file verified.'
             }
         }
 
         stage('Deploy') {
             steps {
-                echo 'Deployment stage completed.'
-                echo 'Website: https://kubireddyshruthika.github.io/Student-Task-Manager/'
+                echo 'DEPLOYMENT STAGE COMPLETED.'
+                echo 'Student Task Manager pipeline executed successfully.'
             }
         }
     }
@@ -46,7 +46,7 @@ pipeline {
             echo 'SUCCESS: All pipeline stages passed!'
         }
         failure {
-            echo 'Pipeline failed. Check the first error above.'
+            echo 'FAILURE: Check the Console Output for the error.'
         }
     }
 }
