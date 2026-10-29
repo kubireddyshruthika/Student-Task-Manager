@@ -15,6 +15,7 @@ pipeline {
                     if (!fileExists('index.html')) {
                         error('ERROR: index.html not found!')
                     }
+
                     echo 'SUCCESS: index.html exists.'
                 }
             }
@@ -29,24 +30,32 @@ pipeline {
         stage('Test') {
             steps {
                 bat 'findstr /i /c:"<html" index.html > NUL'
+
                 echo 'TEST PASSED: HTML file verified.'
             }
         }
 
         stage('Deploy') {
             steps {
-                echo 'DEPLOYMENT STAGE COMPLETED.'
-                echo 'Student Task Manager pipeline executed successfully.'
+                echo '======================================'
+                echo 'STUDENT TASK MANAGER DEPLOYMENT'
+                echo '======================================'
+                echo 'Website URL:'
+                echo 'https://kubireddyshruthika.github.io/Student-Task-Manager/'
+                echo 'Deployment stage completed.'
             }
         }
     }
 
     post {
         success {
-            echo 'SUCCESS: All pipeline stages passed!'
+            echo 'SUCCESS: ALL PIPELINE STAGES PASSED!'
+            echo 'Open your website:'
+            echo 'https://kubireddyshruthika.github.io/Student-Task-Manager/'
         }
+
         failure {
-            echo 'FAILURE: Check the Console Output for the error.'
+            echo 'PIPELINE FAILED. Check the Console Output.'
         }
     }
 }
