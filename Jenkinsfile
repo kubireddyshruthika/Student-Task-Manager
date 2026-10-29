@@ -2,33 +2,58 @@ pipeline {
     agent any
 
     stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Verify Project Files') {
+            steps {
+                script {
+                    if (isUnix()) {
+                        sh 'test -f index.html'
+                    } else {
+                        bat 'if not exist index.html exit /b 1'
+                    }
+                }
+                echo 'index.html found successfully!'
+            }
+        }
+
         stage('Build') {
             steps {
-                echo 'BUILD: Checking website files'
-                bat 'if exist index.html (echo Website file found) else (exit 1)'
+                echo 'Student Task Manager build completed successfully.'
             }
         }
 
         stage('Test') {
             steps {
-                echo 'TEST: Checking website file'
-                bat 'if exist index.html (echo Test passed) else (exit 1)'
+                script {
+                    if (isUnix()) {
+                        sh 'grep -q "<html" index.html'
+                    } else {
+                        bat 'findstr /i /c:"<html" index.html'
+                    }
+                }
+                echo 'Basic HTML verification passed!'
             }
         }
 
         stage('Deploy') {
             steps {
-                echo 'DEPLOY: Copying website'
-                bat 'if not exist deployed mkdir deployed'
-                bat 'copy /Y index.html deployed\\index.html'
-                echo 'DEPLOY SUCCESS'
+                echo 'Deployment stage completed. GitHub Pages publishing is separate.'
             }
         }
     }
 
     post {
         success {
-            echo 'Student Task Manager CI/CD pipeline completed successfully!'
+            echo 'SUCCESS: Student Task Manager pipeline completed!'
+        }
+
+        failure {
+            echo 'FAILED: Check the Console Output above for the exact error.'
         }
     }
 }
